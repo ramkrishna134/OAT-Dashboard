@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="26459d9a-b67f-45c4-b0bd-4b31ee31ca55" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/api/quizapi.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/quizapi.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/singlequiz.php" beforeDir="false" afterPath="$PROJECT_DIR$/singlequiz.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +49,7 @@
       <option name="presentableId" value="Default" />
       <updated>1608898539667</updated>
       <workItem from="1608898548997" duration="8133000" />
-      <workItem from="1608965290508" duration="12753000" />
+      <workItem from="1608965290508" duration="26135000" />
     </task>
     <servers />
   </component>

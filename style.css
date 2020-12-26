@@ -89,6 +89,47 @@ hr{
     opacity:1;
 }
 
+.form-control{
+    background-color: #131c29;
+    color: white;
+}
+.form-control:focus{
+    background-color: #131c29;
+    color: white;
+}
+
+.pieContainer {
+    height: 150px;
+    position: relative;
+}
+
+.pieBackground {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    box-shadow: 0px 0px 8px rgba(0,0,0,0.5);
+}
+
+.pie {
+    transition: all 1s;
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    clip: rect(0px, 75px, 150px, 0px);
+}
+
+.hold {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    clip: rect(0px, 150px, 150px, 75px);
+}
+
+
+
 @media (max-width:767px){
     .side-bar{
         width: 50px;

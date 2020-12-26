@@ -13,7 +13,8 @@ $schools = [];
 $countschool = count($quiz->schoolList);  // 2
 for ($i = 0; $i < $countschool; $i++) {
     $school = $quiz->schoolList[$i];
-    array_push($schools, ['y' => $school->totalScore, 'label' =>"Total Score-".$school->schoolName]);
+    $average = number_format((float)(($school->obtainedScore/$school->totalScore)*100),'2');
+    array_push($schools, ['y' => $average, 'label' =>$school->schoolName]);
 
 }
 $dataPoints = $schools;
@@ -74,7 +75,11 @@ $dataPoints = $schools;
                     <div class="quiz-content px-0 px-sm-5 py-2">
                         <div class="row">
                             <div class="col-sm-12">
-                                <h2 class="text-white mt-2 font-weight-bold"><?php echo $quiz->quiz->name?></h2>
+                                <a href="javascript:window.print()" class="print align-self-end"><i class="fas fa-print"></i> Print this report</a>
+                                <div class="heading d-flex align-items-center">
+                                    <h2 class="text-white mt-2 font-weight-bold"><?php echo $quiz->quiz->name?></h2>
+                                    <div class="badge bg-success mx-2">Time Limit: <?php echo ($quiz->quiz->timeLimit)/60 ?>Minute</div>
+                                </div>
                                 <p class="text-white"><?php echo $quiz->quiz->text;?></p>
                                 <hr>
                             </div>
@@ -97,7 +102,7 @@ $dataPoints = $schools;
 
                         <div class="row">
                             <div class="col-sm-6">
-                                <div class="card counter shadow mb-3 rounded">
+                                <div class="card counter shadow mb-3 rounded" id="printMe">
                                     <div class="card-header">
                                         <h4 class="mb-0"><i class="fas fa-university text-primary"></i> Participating Schools</h4>
                                     </div>
@@ -107,17 +112,15 @@ $dataPoints = $schools;
                                                 <thead>
                                                 <tr>
                                                     <th>School Name</th>
-                                                    <th>Total Score</th>
-                                                    <th>Obtained Score</th>
-                                                    <th>No Of Student</th>
+                                                    <th>Average Score</th>
+                                                    <th>No. Of Student</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 <?php foreach ($schoolList as $school):?>
                                                     <tr>
                                                         <th><?php echo $school->schoolName;?></th>
-                                                        <td><span class="text-success"><?php echo $school->totalScore;?></span></td>
-                                                        <td><span class="text-danger"><?php echo $school->obtainedScore;?></span></td>
+                                                        <td><span class="text-success"><?php echo number_format((float)(($student->obtainedScore/$student->totalScore)*100),'2');?></span></td>
                                                         <td><?php echo count($school->studentList);?></td>
                                                     </tr>
                                                 <?php endforeach;?>
@@ -150,6 +153,7 @@ $dataPoints = $schools;
                                     </div>
 
                                     <div class="card-body height-400 mb-3">
+                                        <input type="text" class="form-control mb-3" id="myInput" onkeyup="myFunction()" placeholder="Search by School Name" title="Type School Name">
                                         <div class="table-responsive">
                                             <table class="table">
                                                 <thead>
@@ -164,14 +168,14 @@ $dataPoints = $schools;
                                                 </tr>
                                                 </thead>
 
-                                                <tbody>
+                                                <tbody id="myTable">
                                                 <?php foreach($students as $student):?>
                                                     <tr>
                                                         <td><?php echo $student->nickname;?></td>
                                                         <td><?php echo $student->firstName. $student->lastName;?></td>
                                                         <td><?php echo $student->studentSchool;?></td>
                                                         <td><?php echo $student->studentClass;?></td>
-                                                        <td><span class="text-success"><?php echo $student->totalScore;?></span></td>
+                                                        <td><span class="text-success"><?php echo $student->totalScore?></span></td>
                                                         <td><span class="text-danger"><?php echo $student->obtainedScore;?></span></td>
                                                         <td>
                                                             <a href="" data-bs-toggle="modal" data-bs-target="#Modal_<?php echo $student->nickname?>" class="btn btn-primary btn-sm">View Details</a>
@@ -194,87 +198,125 @@ $dataPoints = $schools;
 
 
 <?php foreach($students as $student):?>
-<!-- Modal -->
-<div class="modal fade" id="Modal_<?php echo $student->nickname?>" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content counter">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"><?php echo $student->firstName. $student->lastName;?></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <h4>Quiz Category List</h4>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>Category</th>
-                            <th>Total Score</th>
-                            <th>Obtained Score</th>
-                        </tr>
-                        </thead>
+    <!-- Modal -->
+    <div class="modal fade" id="Modal_<?php echo $student->nickname?>" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content counter">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><?php echo $student->firstName. $student->lastName;?></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4>Quiz Category List</h4>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Total Score</th>
+                                        <th>Obtained Score</th>
+                                    </tr>
+                                    </thead>
 
-                        <tbody>
-                        <?php $categories = $student->quizCategoryList;
-                        foreach($categories as $category):
+                                    <tbody>
+                                    <?php $categories = $student->quizCategoryList;
+                                    foreach($categories as $category):
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $category->categoryName; ?></td>
+                                            <td class="text-success"><?php echo $category->totalScore;?></td>
+                                            <td class="text-danger"><?php echo $category->obtainedScore;?></td>
+                                        </tr>
+                                    <?php endforeach;?>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <?php
+                            $categories = [];
+                            $countcategory = count($student->quizCategoryList);  // 2
+                            for ($i = 0; $i < $countcategory; $i++) {
+                                $category = $student->quizCategoryList[$i];
+                                $average = number_format((float)(($category->obtainedScore/$category->totalScore)*100),'2');
+                                array_push($categories, ['y' => $average, 'label' =>$category->categoryName]);
+
+                            }
+
+                            $dataPoints2 = $categories;
+
                             ?>
+
+                        </div>
+                    </div>
+
+                    <h4>Quiz Questions</h4>
+                    <?php
+                    $questions = [];
+                    $countsquiz= count($student->quizCategoryList);
+                    for($i=0; $i<$countsquiz; $i++){
+                        $category = $student->quizCategoryList[$i];
+                        $questionList= count($category->quizQuestionList);
+
+                        for ($j=0; $j<$questionList; $j++){
+                            $question = $category->quizQuestionList[$j];
+                            array_push($questions, $question);
+                        }
+                    };
+
+                    //                var_dump($questions);
+                    ?>
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
                             <tr>
-                                <td><?php echo $category->categoryName; ?></td>
-                                <td class="text-success"><?php echo $category->totalScore;?></td>
-                                <td class="text-danger"><?php echo $category->obtainedScore;?></td>
+                                <th>Title</th>
+                                <th>Points</th>
+                                <th>Obtained Score</th>
                             </tr>
-                        <?php endforeach;?>
+                            </thead>
 
-                        </tbody>
-                    </table>
-                </div>
+                            <tbody>
 
-                <h4>Quiz Questions</h4>
-                <?php
-                $questions = [];
-                $countsquiz= count($student->quizCategoryList);
-                for($i=0; $i<$countsquiz; $i++){
-                    $category = $student->quizCategoryList[$i];
-                    $questionList= count($category->quizQuestionList);
-
-                    for ($j=0; $j<$questionList; $j++){
-                        $question = $category->quizQuestionList[$j];
-                        array_push($questions, $question);
-                    }
-                };
-
-//                var_dump($questions);
-                ?>
-
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Points</th>
-                            <th>Obtained Score</th>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-
-                        <?php foreach($questions as $question):;?>
+                            <?php foreach($questions as $question):;?>
+                                <tr>
+                                    <td><?php echo $question->title;?></td>
+                                    <td><?php echo $question->points;?></td>
+                                    <td class="text-success"><?php echo $question->obtainedScore;?></td>
+                                </tr>
+                            <?php endforeach;?>
+                            </tbody>
+                            <tfoot>
                             <tr>
-                                <td><?php echo $question->title;?></td>
-                                <td><?php echo $question->points;?></td>
-                                <td class="text-success"><?php echo $question->obtainedScore;?></td>
+                                <?php $sum_points = 0;
+                                foreach ($questions as $question) {
+                                    $sum_points += $question->points;
+                                }
+                                ?>
+                                <td></td>
+                                <td class="font-weight-bold">Total Points: <?php echo $sum_points?></td>
+
+                                <?php $sum_score = 0;
+                                foreach ($questions as $question) {
+                                    $sum_score += $question->obtainedScore;
+                                }
+                                ?>
+                                <td class="font-weight-bold">Total Obtained Points: <?php echo $sum_score?></td>
                             </tr>
-                        <?php endforeach;?>
-                        </tbody>
-                    </table>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 <?php endforeach;?>
 
 
@@ -282,7 +324,7 @@ $dataPoints = $schools;
 <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 <!-- JavaScript Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script src="./canvasjs-3.2.5/canvasjs.min.js"></script>
 
 <script>
     window.onload = function () {
@@ -305,9 +347,50 @@ $dataPoints = $schools;
                 dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
             }]
         });
-        chart.render();
+    chart.render();
 
     }
+
+
+    $(document).ready(function(){
+        $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    function printDiv(divName){
+        var printContents = document.getElementById(divName).innerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = printContents;
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
+
+    }
+
+    // function myFunction() {
+    //     var input, filter, table, tr, td, i, txtValue;
+    //     input = document.getElementById("myInput");
+    //     filter = input.value.toUpperCase();
+    //     table = document.getElementById("myTable");
+    //     tr = table.getElementsByTagName("tr");
+    //     for (i = 0; i < tr.length; i++) {
+    //         td = tr[i].getElementsByTagName("td")[0];
+    //         if (td) {
+    //             txtValue = td.textContent || td.innerText;
+    //             if (txtValue.toUpperCase().indexOf(filter) > -1) {
+    //                 tr[i].style.display = "";
+    //             } else {
+    //                 tr[i].style.display = "none";
+    //             }
+    //         }
+    //     }
+    // }
 </script>
 </body>
 </html>
