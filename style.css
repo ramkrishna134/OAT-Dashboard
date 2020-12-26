@@ -1,0 +1,115 @@
+.side-bar{
+    width: 250px;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: #131c29;
+    padding: 20px;
+}
+
+ul{
+    padding:0;
+    list-style:none;
+}
+
+ul a{
+    padding: 10px;
+    background-color:#131c29;
+    display: block;
+    margin-bottom: 10px;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+ul a:hover{
+    background-color: #0d6efd;
+    color: white;
+}
+.breadcrumb{
+    background-color: #131c29;
+}
+
+.breadcrumb-item.active{
+    color: white;
+}
+
+.breadcrumb-item a{
+    font-weight: bold;
+}
+
+body{
+    background-color:#192231;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.counter{
+    background-color:#24344d;
+    color: white;
+}
+
+.table{
+    color: white;
+}
+
+.card-body{
+    overflow: auto;
+}
+
+.height-300{
+    height: 300px;
+}
+
+.height-400{
+    height: 400px;
+}
+
+.side-bar h3{
+    color: white
+}
+
+hr{
+    background: white;
+}
+
+.main-content{
+    padding-left: 250px;
+    width:100%;
+}
+
+#myChart{
+    height: 300px;
+    width: 100%;
+}
+
+.btn-close{
+    background-color: red;
+    opacity:1;
+}
+
+@media (max-width:767px){
+    .side-bar{
+        width: 50px;
+        padding: 5px;
+    }
+
+    .main-content{
+        padding-left:50px;
+    }
+
+    .side-bar .side-menu a span{
+        display:none;
+    }
+
+    p{
+        font-size:0.8rem;
+    }
+}
+
+@media (min-width: 576px){
+    .modal-dialog {
+        max-width: 900px;
+    }
+}
