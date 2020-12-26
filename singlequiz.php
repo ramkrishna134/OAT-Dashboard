@@ -297,15 +297,27 @@ $dataPoints = $schools;
                                     $sum_points += $question->points;
                                 }
                                 ?>
-                                <td></td>
-                                <td class="font-weight-bold">Total Points: <?php echo $sum_points?></td>
 
                                 <?php $sum_score = 0;
                                 foreach ($questions as $question) {
                                     $sum_score += $question->obtainedScore;
                                 }
                                 ?>
+                                <td>Total Points: <?php echo $sum_points?></td>
                                 <td class="font-weight-bold">Total Obtained Points: <?php echo $sum_score?></td>
+
+                                <?php $average = number_format((float)(($sum_score/$sum_points)*100),'2');?>
+
+                                <td>Average Score
+                                    <?php if($average <= 40):?>
+                                        <span class="font-weight-bold text-danger"><?php echo $average;?></span>
+                                    <?php elseif($average <= 70):?>
+                                        <span class="font-weight-bold text-warning"><?php echo $average;?></span>
+                                    <?php elseif ($average <=100):?>
+                                        <span class="font-weight-bold text-success"><?php echo $average;?></span>
+                                    <?php endif;?>
+
+                                </td>
                             </tr>
                             </tfoot>
                         </table>
